@@ -18,7 +18,7 @@
 #define PT_SIG_2 '#'
 #define PT_SIG_3 '$'
 #define PT_SIG_4 '%'
-#define PT_SIG_5 '\'
+#define PT_SIG_5 '\\'
 #define PT_SIG_6 '*'
 
 using namespace std;
