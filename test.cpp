@@ -12,7 +12,6 @@ int main() {
     try {
         pt.AddHeader(header);
         pt.AddRows(vecs);
-        pt.SetBorderStyle(Sign::PT_PLUS,Sign::PT_DOT,Sign::PT_SIG_1);
         pt.DrawTable();
         cout<<pt.to_String()<<endl;
     }catch (Exception &e){
@@ -26,6 +25,7 @@ int main() {
         {"222","mike","123"},
         {"3333","john","000"}
     });
+    pt2.SetBorderStyle(Sign::PT_PLUS,Sign::PT_DOT,Sign::PT_SIG_1);
     pt2.DrawTable();
     cout<<pt2.to_String()<<endl;
     
