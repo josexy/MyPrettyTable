@@ -5,40 +5,60 @@ Source file:
 ```
 #include <iostream>
 #include "PrettyTable.h"
+using namespace std;
 
-int main(){
-    PrettyTable pp;
-
-    vector<string> vec_header={"ID","USERNAME","PASSWORD"};
-    pp.AddHeader(vec_header);
-
-    vector<string> vec_data1={"001","root","root222ff99992"};
-    vector<string> vec_data2={"002","ror3eefefot","3r3"};
-    vector<string> vec_data3={"03","rrroot","root22"};
-
-    pp.AddRow(vec_data1);
-    pp.AddRow(vec_data2);
-    pp.AddRow(vec_data3);
-
-    cout<<pp.to_String()<<endl;
-
-
+int main() {
+    vector<string>header={"姓名","学号","信息"};
+    vector<string>row1={"张小飞","1111111111","你好、我爱C++"};
+    vector<string>row2={"关小羽","22222222222","你好？我爱ython"};
+    vector<string>row3={"刘小备","3333333333333","你好，我爱PHP"};
+    vector<vector<string>>vecs{row1,row2,row3};
+    PrettyTable pt;
+    try {
+        pt.AddHeader(header);
+        pt.AddRows(vecs);
+        pt.DrawTable();
+        cout<<pt.to_String()<<endl;
+    }catch (Exception &e){
+        cout<<e.what()<<endl;
+    }
+   
+    PrettyTable pt2;
+    pt2.AddHeader({"id","username","password"});
+    pt2.AddRows({
+        {"111","tony......","12345"},
+        {"222","mike","123"},
+        {"3333","john","000"}
+    });
+    pt2.SetBorderStyle(Sign::PT_PLUS,Sign::PT_DOT,Sign::PT_SIG_1);
+    pt2.DrawTable();
+    cout<<pt2.to_String()<<endl;
     return 0;
 }
 
 ```
 
 ```
-g++ test.cpp -o test
+g++ test.cpp PrettyTable.cpp -o test
 ./test
 ```
 Output:
 ```
-+-----+-------------+----------------+
-| ID  | USERNAME    | PASSWORD       |
-+-----+-------------+----------------+
-| 001 | root        | root222ff99992 |
-| 002 | ror3eefefot | 3r3            |
-| 03  | rrroot      | root22         |
-+-----+-------------+----------------+
++--------+---------------+-----------------+
+| 姓名   | 学号          | 信息            |
++--------+---------------+-----------------+
+| 张小飞 | 1111111111    | 你好、我爱C++   |
+| 关小羽 | 22222222222   | 你好？我爱ython |
+| 刘小备 | 3333333333333 | 你好，我爱PHP   |
++--------+---------------+-----------------+
+
++......+............+..........+
+@ id   @ username   @ password @
++......+............+..........+
+@ 111  @ tony...... @ 12345    @
+@ 222  @ mike       @ 123      @
+@ 3333 @ john       @ 000      @
++......+............+..........+
+
+
 ```
