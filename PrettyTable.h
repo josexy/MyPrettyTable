@@ -8,7 +8,6 @@
 #include <string>
 #include <sstream>
 #include "Sign.h"
-#include "myTermColor.h"
 
 using namespace std;
 
