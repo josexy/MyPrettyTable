@@ -60,5 +60,13 @@ Output:
 @ 3333 @ john       @ 000      @
 +......+............+..........+
 
-
 ```
+
+In Windows:
+
+![image](https://github.com/josexy/MyPrettyTable/blob/master/photo_windows.png)
+
+In Linux:
+
+![image](https://github.com/josexy/MyPrettyTable/blob/master/photo_linux.png)
+
