@@ -1,5 +1,6 @@
 # MyPrettyTable
-Print Table with C++ like mysql
+Print Table with C++ like mysql.
+It also supports Chinese characters.
 
 Source file:
 ```
