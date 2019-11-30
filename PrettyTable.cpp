@@ -84,7 +84,6 @@ void PrettyTable::DrawTable(){
  *  +----------+------------------+----------+----------+---------------------+
  */
 void PrettyTable::_draw_header(){
-    if(this->m_Columns<=0)return;
     // draw top line
     // +----------+------------------+----------+----------+---------------------+
     _put_char(m_BorderStyle.Corner);
@@ -99,7 +98,7 @@ void PrettyTable::_draw_header(){
         m_innerOss<<' ';
 
         // Solve the Chinese characters problems
-        // setw() = MaxSize + String.Size() - StringCapacitySize(String)
+        // setw() = MaxSize + String.Size() - StringCapacity(String)
         // setw() = MaxSize + Length(Chinese hans)
         String str=m_Header[i];
 #ifdef WIN32
@@ -127,14 +126,13 @@ void PrettyTable::_draw_header(){
  *  draw alll rows
  */
 void PrettyTable::_draw_rows(){
-    if(this->m_Rows<=0)return;
     for (int j = 0; j < this->m_Rows ; ++j) {
         _put_char(m_BorderStyle.V);
         for (int i = 0; i < this->m_Columns; ++i) {
             m_innerOss<<' ';
 
             // Solve the Chinese characters problems
-            // setw() = MaxSize + String.Size() - StringCapacitySize(String)
+            // setw() = MaxSize + String.Size() - StringCapacity(String)
             // setw() = MaxSize + Length(Chinese hans)
             String str=m_multiRows[j][i];
 #ifdef WIN32
