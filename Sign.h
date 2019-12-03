@@ -2,6 +2,44 @@
 #ifndef PRETTYTABLE_SIGN_H
 #define PRETTYTABLE_SIGN_H
 
+// only support Linux...
+namespace Color{
+    enum class ForegroundColor{
+        None=0,
+        Black=30,
+        Red=31,
+        Green=32,
+        Orange=33,
+        Blue=34,
+        Solferino=35,
+        Cyan=36,
+        LightGray=37
+    };
+    enum class BackgroundColor{
+        None=0,
+        Black=40,
+        Red=41,
+        Green=42,
+        Orange=43,
+        Blue=44,
+        Solferino=45,
+        Cyan=46,
+        LightGray=47,
+        DeepGray=100,
+        LightRed=101,
+        LightGreen=102,
+        Yellow=103,
+        LightBlue=104,
+        LightPurple=105,
+        BlueGreen=106,
+        White=107
+    };
+    enum class ControlCode{
+        None=0,
+        Highlight=1,
+        UnderLine=2,
+    };
+}
 // special punctuation character
 enum{
     PC1=0x3002u,
@@ -30,7 +68,9 @@ enum{
     PC24=0x3008u,
     PC25=0x3009u,
 };
+// PrettyTable Border and Table style
 enum class Sign{
+    // Border Style
     PT_PLUS='+', 
     PT_H ='-', 
     PT_V ='|', 
@@ -42,6 +82,6 @@ enum class Sign{
     PT_SIG_4= '%', 
     PT_SIG_5= '\\', 
     PT_SIG_6='*', 
-    PT_SIG_7='/'
+    PT_SIG_7='/',
 };
 #endif
