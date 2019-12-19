@@ -74,6 +74,6 @@ private:
 	WORD m_OldConsoleAttribute;
 	WORD m_NewConsoleAttribute;
 };
-#endif 
+#endif
 
 #endif

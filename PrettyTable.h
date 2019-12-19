@@ -1,16 +1,27 @@
 
 #ifndef PRETTYTABLE_PRETTYTABLE_H
 #define PRETTYTABLE_PRETTYTABLE_H
+
 #include <iostream>
-#include <exception>
+#include <string>
 #include <iomanip>
 #include <vector>
-#include <string>
 #include <sstream>
 #include <fstream>
+#include <exception>
 #include "Sign.h"
 
-using namespace std;
+using std::string;
+using std::exception;
+using std::vector;
+using std::stringstream;
+using std::wstring;
+using std::ostream;
+using std::ofstream;
+using std::endl;
+using std::setw;
+using std::left;
+using std::right;
 
 // Default space takes two bytes
 #define PADDING_LEFT_RIGHT 2
@@ -64,13 +75,14 @@ private:
     vector<int>m_ColumnsContent_max_len;
     bool is_DrawTable;
     ofstream m_FileOut;
+    bool is_cancelFrame;
 public:
-    friend ostream& operator<<(ostream& out, PrettyTable& pt) {
-        out << pt.to_String();
-        return out;
-    }
     PrettyTable();
     ~PrettyTable();
+    /**
+     * Cancel the border frame style
+     */
+    void CancelFrameStyle(){is_cancelFrame=true;}
     /**
      *  Set table border
      * @param _Corner suck as '+'
@@ -118,6 +130,13 @@ public:
      * @param _file_path
      */
     void OutputFile(const string& _file_path = "output_table.txt");
+
+    /**
+     * Clean all data
+     */
+    void Cleanup();
+
+    friend ostream& operator<<(ostream& out, PrettyTable& pt) {out << pt.to_String();return out;}
 
 private:
     /**

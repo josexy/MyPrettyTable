@@ -10,15 +10,12 @@ PrettyTable::PrettyTable() {
     m_BorderStyle.V = static_cast<Sign>(Sign::PT_V);
     this->m_Rows = 0;
     this->m_Columns = 0;
+    this->is_cancelFrame= false;
     this->is_DrawTable = false;
     this->m_Header._align = Align::Left;
 }
 PrettyTable::~PrettyTable() {
-    this->m_Rows = 0;
-    this->m_Columns = 0;
-    this->m_Header._header.clear();
-    m_multiColumns.clear();
-    m_multiRows.clear();
+    this->Cleanup();
 }
 /**
  *  Set table border
@@ -46,8 +43,11 @@ PrettyTable::String PrettyTable::to_String(int _start, int _end) {
  * @param _header
  */
 void PrettyTable::AddHeader(const PrettyTable::StringArray& _header, Align _align) {
+    if(_header.empty())
+        throw Exception("Not have a _header_");
+    if(_align!=Align::Left)
+        this->m_Header._align = _align;
     this->m_Header._header = _header;
-    this->m_Header._align = _align;
     this->m_Columns = this->m_Header._header.size();
     // init resize the header columns
     this->m_multiColumns.resize(this->m_Columns);
@@ -60,6 +60,8 @@ void PrettyTable::AddHeader(const PrettyTable::StringArray& _header, Align _alig
  * @param _row
  */
 void PrettyTable::AddRow(const PrettyTable::StringArray& _row) {
+    if(_row.size()<=0)
+        return;
     m_multiRows.push_back(_row);
     m_Rows++;
     if (this->m_Columns != _row.size()) {
@@ -111,7 +113,7 @@ void PrettyTable::_draw_table(int s, int e) {
 }
 /**
  *  build header such as
- *  "+----------+------------------+----------+----------+---------------------+
+ *  +----------+------------------+----------+----------+---------------------+
  *  | xx        | xx              | xx       | xx       | xx                   |
  *  +----------+------------------+----------+----------+---------------------+
  */
@@ -119,14 +121,18 @@ void PrettyTable::_draw_header() {
     if (this->m_Columns <= 0)return;
     // draw top line
     // +----------+------------------+----------+----------+---------------------+
-    _put_char(m_BorderStyle.Corner);
-    for (int i = 0; i < this->m_Columns; ++i) {
-        _put_chars(m_BorderStyle.H, this->m_ColumnsContent_max_len[i] + PADDING_LEFT_RIGHT);
+    if(!this->is_cancelFrame){
         _put_char(m_BorderStyle.Corner);
+        for (int i = 0; i < this->m_Columns; ++i) {
+            _put_chars(m_BorderStyle.H, this->m_ColumnsContent_max_len[i] + PADDING_LEFT_RIGHT);
+            _put_char(m_BorderStyle.Corner);
+        }
+        _put_endline();
     }
-    _put_endline();
     // draw header data
-    _put_char(m_BorderStyle.V);
+    if(!this->is_cancelFrame)
+        _put_char(m_BorderStyle.V);
+
     for (int i = 0; i < this->m_Columns; ++i) {
         int _PADDING = 0;
         // Solve the Chinese characters problems
@@ -139,8 +145,9 @@ void PrettyTable::_draw_header() {
         _PADDING = this->m_ColumnsContent_max_len[i] + _get_Chinese_len(str);
 #endif
         m_innerOss << ' ';
-        padding(_PADDING, m_Header._align);
-        padding(_PADDING, m_Header._align);
+        if(!this->is_cancelFrame){
+            padding(_PADDING, m_Header._align);
+        }
         if (m_Header._align == Align::Internal) {
 #ifdef WIN32
             int s1 = (PADDING_LEFT_RIGHT / 2 + this->m_ColumnsContent_max_len[i]) / 2 + (StringCapacity(str)) / 2;
@@ -158,18 +165,21 @@ void PrettyTable::_draw_header() {
             m_innerOss << str;
         }
         m_innerOss << ' ';
-        _put_char(m_BorderStyle.V);
+        if(!this->is_cancelFrame)
+            _put_char(m_BorderStyle.V);
     }
     _put_endline();
 
     // draw bottom line
     // +----------+------------------+----------+----------+---------------------+
-    _put_char(m_BorderStyle.Corner);
-    for (int i = 0; i < this->m_Columns; ++i) {
-        _put_chars(m_BorderStyle.H, this->m_ColumnsContent_max_len[i] + PADDING_LEFT_RIGHT);
+    if(!this->is_cancelFrame){
         _put_char(m_BorderStyle.Corner);
+        for (int i = 0; i < this->m_Columns; ++i) {
+            _put_chars(m_BorderStyle.H, this->m_ColumnsContent_max_len[i] + PADDING_LEFT_RIGHT);
+            _put_char(m_BorderStyle.Corner);
+        }
+        _put_endline();
     }
-    _put_endline();
 }
 /**
  *  draw alll rows
@@ -187,7 +197,8 @@ void PrettyTable::_draw_rows(int s, int e) {
     }
     for (int j = 0; j < this->m_Rows; ++j) {
         if ((j + 1) < s || (j + 1) > e)continue;
-        _put_char(m_BorderStyle.V);
+        if(!this->is_cancelFrame)
+            _put_char(m_BorderStyle.V);
         for (int i = 0; i < this->m_Columns; ++i) {
             int _PADDING = 0;
             // Solve the Chinese characters problems
@@ -200,7 +211,8 @@ void PrettyTable::_draw_rows(int s, int e) {
             _PADDING = this->m_ColumnsContent_max_len[i] + _get_Chinese_len(str);
 #endif
             m_innerOss << ' ';
-            padding(_PADDING, m_Header._align);
+            if(!this->is_cancelFrame)
+                padding(_PADDING, m_Header._align);
             // do with the internal aligning condition
             if (m_Header._align == Align::Internal) {
 #ifdef WIN32
@@ -214,23 +226,25 @@ void PrettyTable::_draw_rows(int s, int e) {
                            << str
                            << left << setw(s2)
                            << "";
-            }
-            else {
+            }else {
                 m_innerOss << str;
             }
             m_innerOss << ' ';
-            _put_char(m_BorderStyle.V);
+            if(!this->is_cancelFrame)
+                _put_char(m_BorderStyle.V);
         }
         _put_endline();
     }
     // draw bottom line
     // +----------+------------------+----------+----------+---------------------+
-    _put_char(m_BorderStyle.Corner);
-    for (int i = 0; i < this->m_Columns; ++i) {
-        _put_chars(m_BorderStyle.H, this->m_ColumnsContent_max_len[i] + PADDING_LEFT_RIGHT);
+    if(!this->is_cancelFrame){
         _put_char(m_BorderStyle.Corner);
+        for (int i = 0; i < this->m_Columns; ++i) {
+            _put_chars(m_BorderStyle.H, this->m_ColumnsContent_max_len[i] + PADDING_LEFT_RIGHT);
+            _put_char(m_BorderStyle.Corner);
+        }
+        _put_endline();
     }
-    _put_endline();
 }
 /**
  *  get max  size() in columns stringArray
@@ -337,4 +351,22 @@ void PrettyTable::OutputFile(const string& _file_path) {
     m_FileOut.close();
 }
 
-
+/**
+ * Finally clean all data and end up...
+ */
+void PrettyTable::Cleanup() {
+    this->is_cancelFrame=false;
+    this->m_Rows = 0;
+    this->m_Columns = 0;
+    this->m_Header._header.clear();
+    for (int i = 0; i < m_multiColumns.size(); ++i)
+        this->m_multiColumns[i].clear();
+    this->m_multiColumns.clear();
+    for (int j = 0; j <m_multiRows.size() ; ++j)
+        this->m_multiRows[j].clear();
+    this->m_multiRows.clear();
+    this->m_ColumnsContent_max_len.clear();
+    this->m_innerOss.clear();
+    this->m_innerOss.ignore();
+    this->m_FileOut.clear();
+}

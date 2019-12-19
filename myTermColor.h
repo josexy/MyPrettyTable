@@ -4,7 +4,7 @@
 #include <string>
 #include "Sign.h"
 
-using namespace std;
+using std::string;
 
 typedef Color::ForegroundColor CFgColor;
 typedef Color::BackgroundColor CBgColor;
@@ -20,7 +20,6 @@ public:
 	TermColor(CFgColor foregroundColor = CFgColor::None,
 	          CCtlCode controlCode = CCtlCode::None,
 	          CBgColor backgroundColor = CBgColor::None);
-
 	/**
 	 * return the prepared string
 	 */
