@@ -4,7 +4,5 @@ set(CMAKE_CXX_STANDARD 14)
 add_executable(
             PrettyTable test.cpp
             PrettyTable.cpp PrettyTable.h
-            myTermColor.cpp myTermColor.h
-            TerminalColor.h
             Sign.h
             )
