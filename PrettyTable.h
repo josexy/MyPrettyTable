@@ -77,7 +77,7 @@ private:
     ofstream m_FileOut;
     bool is_cancelFrame;
 public:
-    PrettyTable();
+    explicit PrettyTable();
     ~PrettyTable();
     /**
      * Cancel the border frame style

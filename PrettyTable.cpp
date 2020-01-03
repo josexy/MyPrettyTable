@@ -141,7 +141,7 @@ void PrettyTable::_draw_header() {
         String str = m_Header._header[i];
 #ifdef WIN32
         _PADDING = this->m_ColumnsContent_max_len[i];
-#elif __linux__
+#elif __linux__||__APPLE__
         _PADDING = this->m_ColumnsContent_max_len[i] + _get_Chinese_len(str);
 #endif
         m_innerOss << ' ';
@@ -152,7 +152,7 @@ void PrettyTable::_draw_header() {
 #ifdef WIN32
             int s1 = (PADDING_LEFT_RIGHT / 2 + this->m_ColumnsContent_max_len[i]) / 2 + (StringCapacity(str)) / 2;
 			int s2 = this->m_ColumnsContent_max_len[i] - s1;
-#elif __linux__
+#elif __linux__||__APPLE__
             int s1 = (PADDING_LEFT_RIGHT / 2 + this->m_ColumnsContent_max_len[i]) / 2 + (StringCapacity(str)) / 2 + _get_Chinese_len(str);
             int s2 = this->m_ColumnsContent_max_len[i] - s1 + _get_Chinese_len(str);
 #endif
@@ -207,7 +207,7 @@ void PrettyTable::_draw_rows(int s, int e) {
             String str = m_multiRows[j][i];
 #ifdef WIN32
             _PADDING = this->m_ColumnsContent_max_len[i];
-#elif __linux__
+#elif __linux__||__APPLE__
             _PADDING = this->m_ColumnsContent_max_len[i] + _get_Chinese_len(str);
 #endif
             m_innerOss << ' ';
@@ -218,7 +218,7 @@ void PrettyTable::_draw_rows(int s, int e) {
 #ifdef WIN32
                 int s1 = (PADDING_LEFT_RIGHT / 2 + this->m_ColumnsContent_max_len[i]) / 2 + (StringCapacity(str)) / 2;
 				int s2 = this->m_ColumnsContent_max_len[i] - s1;
-#elif __linux__
+#elif __linux__||__APPLE__
                 int s1 = (PADDING_LEFT_RIGHT / 2 + this->m_ColumnsContent_max_len[i]) / 2 + (StringCapacity(str)) / 2 + _get_Chinese_len(str);
                 int s2 = this->m_ColumnsContent_max_len[i] - s1 + _get_Chinese_len(str);
 #endif
@@ -307,7 +307,7 @@ wstring PrettyTable::StringToWString(const string& str) {
 int PrettyTable::StringCapacity(const string& raw_str) {
 #ifdef WIN32
     return raw_str.size();
-#elif __linux__
+#elif __linux__||__APPLE__
     return raw_str.size() - this->_get_Chinese_len(raw_str);
 #endif
 }
