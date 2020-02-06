@@ -2,7 +2,6 @@
 #ifndef PRETTYTABLE_PRETTYTABLE_H
 #define PRETTYTABLE_PRETTYTABLE_H
 
-#include <iostream>
 #include <string>
 #include <iomanip>
 #include <vector>
